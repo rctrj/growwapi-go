@@ -1,6 +1,7 @@
 package growwapi
 
 import (
+	"context"
 	"fmt"
 	"net/url"
 	"strconv"
@@ -51,9 +52,9 @@ type PlaceOrderResponse struct {
 
 // PlaceOrder : This API is used to place a new order in the market.
 // https://groww.in/trade-api/docs/curl/orders#place-order
-func (c *Client) PlaceOrder(req PlaceOrderRequest) (PlaceOrderResponse, error) {
+func (c *Client) PlaceOrder(ctx context.Context, req PlaceOrderRequest) (PlaceOrderResponse, error) {
 	const destination = "https://api.groww.in/v1/order/create"
-	return doPostRequest[PlaceOrderResponse](c, destination, req)
+	return doPostRequest[PlaceOrderResponse](ctx, c, destination, req)
 }
 
 // ModifyOrderRequest represents the request data to modify order
@@ -84,9 +85,9 @@ type ModifyOrderResponse struct {
 
 // ModifyOrder : All pending and open orders can be modified using this API.
 // https://groww.in/trade-api/docs/curl/orders#modify-order
-func (c *Client) ModifyOrder(req ModifyOrderRequest) (ModifyOrderResponse, error) {
+func (c *Client) ModifyOrder(ctx context.Context, req ModifyOrderRequest) (ModifyOrderResponse, error) {
 	const destination = "https://api.groww.in/v1/order/modify"
-	return doPostRequest[ModifyOrderResponse](c, destination, req)
+	return doPostRequest[ModifyOrderResponse](ctx, c, destination, req)
 }
 
 // CancelOrderRequest represents the request data to cancel order
@@ -109,9 +110,9 @@ type CancelOrderResponse struct {
 
 // CancelOrder : All pending and open orders can be cancelled using this API.
 // https://groww.in/trade-api/docs/curl/orders#cancel-order
-func (c *Client) CancelOrder(req CancelOrderRequest) (CancelOrderResponse, error) {
+func (c *Client) CancelOrder(ctx context.Context, req CancelOrderRequest) (CancelOrderResponse, error) {
 	const destination = "https://api.groww.in/v1/order/cancel"
-	return doPostRequest[CancelOrderResponse](c, destination, req)
+	return doPostRequest[CancelOrderResponse](ctx, c, destination, req)
 }
 
 // TradeForOrderRequest represents the request data to get trades for order request
@@ -170,9 +171,9 @@ func (t TradeForOrderRequest) queryParams() url.Values {
 // Since each of these fulfilments is defined as a trade, an order can be assigned to one or more trades.
 // You can use groww_order_id to retrieve all the trades assigned to that order
 // https://groww.in/trade-api/docs/curl/orders#get-trades-for-order
-func (c *Client) GetTradesForOrder(req TradeForOrderRequest) ([]Trade, error) {
+func (c *Client) GetTradesForOrder(ctx context.Context, req TradeForOrderRequest) ([]Trade, error) {
 	destination := fmt.Sprintf("https://api.groww.in/v1/order/trades/%s", req.GrowwOrderId)
-	return doGetRequest[[]Trade](c, destination, req)
+	return doGetRequest[[]Trade](ctx, c, destination, req)
 }
 
 type orderStatusRequest interface {
@@ -231,9 +232,9 @@ func (o OrderStatusRequestWithOrderReferenceId) url() string {
 // GetOrderStatus The API can be used to check the status of an order using the GrowwOrderId or OrderReferenceId.
 // Use OrderStatusRequestWithGrowwOrderId or OrderStatusRequestWithOrderReferenceId
 // https://groww.in/trade-api/docs/curl/orders#get-order-status
-func (c *Client) GetOrderStatus(req orderStatusRequest) (OrderStatusResponse, error) {
+func (c *Client) GetOrderStatus(ctx context.Context, req orderStatusRequest) (OrderStatusResponse, error) {
 	destination := req.url()
-	return doGetRequest[OrderStatusResponse](c, destination, req)
+	return doGetRequest[OrderStatusResponse](ctx, c, destination, req)
 }
 
 // Order represents an order in Groww
@@ -314,9 +315,9 @@ func (l ListOrdersRequest) queryParams() url.Values {
 // ListOrders : The API can be used to get the history of orders executed for the day.
 // It includes all the orders for the day including open, pending, and executed ones.
 // https://groww.in/trade-api/docs/curl/orders#get-order-list
-func (c *Client) ListOrders(req ListOrdersRequest) ([]Order, error) {
+func (c *Client) ListOrders(ctx context.Context, req ListOrdersRequest) ([]Order, error) {
 	destination := "https://api.groww.in/v1/order/list"
-	return doGetRequest[[]Order](c, destination, req)
+	return doGetRequest[[]Order](ctx, c, destination, req)
 }
 
 // GetOrderDetailsRequest represents the request to get order details
@@ -335,7 +336,7 @@ func (g GetOrderDetailsRequest) queryParams() url.Values {
 
 // GetOrderDetails : The api can be used to get the details of an order using the GrowwOrderId.
 // https://groww.in/trade-api/docs/curl/orders#get-order-details
-func (c *Client) GetOrderDetails(req GetOrderDetailsRequest) (Order, error) {
+func (c *Client) GetOrderDetails(ctx context.Context, req GetOrderDetailsRequest) (Order, error) {
 	destination := fmt.Sprintf(" https://api.groww.in/v1/order/detail/%s", req.GrowwOrderId)
-	return doGetRequest[Order](c, destination, req)
+	return doGetRequest[Order](ctx, c, destination, req)
 }

@@ -3,6 +3,7 @@
 package growwapi
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"time"
@@ -58,19 +59,24 @@ type Instrument struct {
 	SellAllowed bool `csv:"sell_allowed"`
 }
 
-func (c *Client) Instruments() ([]Instrument, error) {
-	return Instruments(c.httpClient)
+func (c *Client) Instruments(ctx context.Context) ([]Instrument, error) {
+	return Instruments(ctx, c.httpClient)
 }
 
 // Instruments fetches and returns details of all instruments
-func Instruments(httpClient *http.Client) ([]Instrument, error) {
+func Instruments(ctx context.Context, httpClient *http.Client) ([]Instrument, error) {
 	if httpClient == nil {
 		httpClient = http.DefaultClient
 	}
 
 	const instrumentsUrl = "https://growwapi-assets.groww.in/instruments/instrument.csv"
 
-	resp, err := httpClient.Get(instrumentsUrl)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, instrumentsUrl, nil)
+	if err != nil {
+		return nil, fmt.Errorf("NewRequestWithContext: %w", err)
+	}
+
+	resp, err := httpClient.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("httpClient.Get(%q): %w", instrumentsUrl, err)
 	}

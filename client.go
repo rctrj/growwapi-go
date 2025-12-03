@@ -2,6 +2,7 @@ package growwapi
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -92,8 +93,8 @@ type asQueryParam interface {
 	queryParams() url.Values
 }
 
-func doGetRequest[T any](c *Client, url string, queries asQueryParam) (out T, err error) {
-	req, err := http.NewRequest(http.MethodGet, url, nil)
+func doGetRequest[T any](ctx context.Context, c *Client, url string, queries asQueryParam) (out T, err error) {
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
 		return out, fmt.Errorf("http.NewRequest: %w", err)
 	}
@@ -101,24 +102,24 @@ func doGetRequest[T any](c *Client, url string, queries asQueryParam) (out T, er
 	params := queries.queryParams()
 	req.URL.RawQuery = params.Encode()
 
-	return doRequest[T](c, req)
+	return doRequest[T](ctx, c, req)
 }
 
-func doPostRequest[T any](c *Client, url string, body any) (out T, err error) {
+func doPostRequest[T any](ctx context.Context, c *Client, url string, body any) (out T, err error) {
 	msg, err := json.Marshal(body)
 	if err != nil {
 		return out, fmt.Errorf("json.Marshal: %w", err)
 	}
 
-	req, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(msg))
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, url, bytes.NewBuffer(msg))
 	if err != nil {
 		return out, fmt.Errorf("http.NewRequest: %w", err)
 	}
 
-	return doRequest[T](c, req)
+	return doRequest[T](ctx, c, req)
 }
 
-func doRequest[T any](c *Client, req *http.Request) (out T, err error) {
+func doRequest[T any](ctx context.Context, c *Client, req *http.Request) (out T, err error) {
 	req.Header = c.headers()
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
