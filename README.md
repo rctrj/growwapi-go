@@ -6,6 +6,10 @@ Features:
 - Strongly typed golang structs
 - APIs exposed as golang methods
 
+Future Features:
+- Rate Limiting
+- Retries
+
 This started as a personal requirement, and I am adding modules when it's needed to me.
 In case you want me to implement another module, let me know and it will be done
 
@@ -20,7 +24,7 @@ Below table shows the current status ( ✅: Done | ❔: May add | ❌: Probably 
 | Margin                                        | ❔      |
 | Live Data                                     | ✅      |
 | Historical Data (Deprecated, use Backtesting) | ❌      |
-| Backtesting                                   | ❔      |
+| Backtesting                                   | ✅      |
 | Annexures                                     | ✅      |
 
 ### Installation

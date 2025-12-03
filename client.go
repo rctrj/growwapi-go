@@ -101,6 +101,12 @@ type Ohlc struct {
 	Close float32 `json:"close"`
 }
 
+// Ohlcv contains Ohlc for an instrument along with volume
+type Ohlcv struct {
+	Ohlc
+	Volume float32 `json:"volume"`
+}
+
 type ohlcString struct {
 	Ohlc
 }

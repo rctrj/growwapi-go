@@ -44,6 +44,7 @@ func (t *Time) UnmarshalJSON(bytes []byte) error {
 
 	layouts := []string{
 		time.RFC3339,
+		time.DateTime,
 		time.DateOnly,
 		"2006-01-02T15:04:05Z",
 		"2006-01-02T15:04:05",
