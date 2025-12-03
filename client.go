@@ -89,6 +89,32 @@ func (c *Client) headers() http.Header {
 	return headers
 }
 
+// Ohlc contains open, high, low and close prices for an instrument in an interval
+type Ohlc struct {
+	// Opening price
+	Open float32 `json:"open"`
+	// Highest price
+	High float32 `json:"high"`
+	// Lowest price
+	Low float32 `json:"low"`
+	// Closing price
+	Close float32 `json:"close"`
+}
+
+type ohlcString struct {
+	Ohlc
+}
+
+func (o *ohlcString) UnmarshalJSON(bytes []byte) error {
+	var ohlc Ohlc
+	if err := json.Unmarshal(bytes, &ohlc); err != nil {
+		return err
+	}
+
+	o.Ohlc = ohlc
+	return nil
+}
+
 type asQueryParam interface {
 	queryParams() url.Values
 }
@@ -99,8 +125,10 @@ func doGetRequest[T any](ctx context.Context, c *Client, url string, queries asQ
 		return out, fmt.Errorf("http.NewRequest: %w", err)
 	}
 
-	params := queries.queryParams()
-	req.URL.RawQuery = params.Encode()
+	if queries != nil {
+		params := queries.queryParams()
+		req.URL.RawQuery = params.Encode()
+	}
 
 	return doRequest[T](ctx, c, req)
 }

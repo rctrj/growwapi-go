@@ -15,10 +15,10 @@ Below table shows the current status ( ✅: Done | ❔: May add | ❌: Probably 
 |-----------------------------------------------|--------|
 | Instruments                                   | ✅      |
 | Orders                                        | ✅      |
-| Smart Orders                                  | ✅      |
+| Smart Orders                                  | ❔      |
 | Portfolio                                     | ❔      |
 | Margin                                        | ❔      |
-| Live Data                                     | ❔      |
+| Live Data                                     | ✅      |
 | Historical Data (Deprecated, use Backtesting) | ❌      |
 | Backtesting                                   | ❔      |
 | Annexures                                     | ✅      |

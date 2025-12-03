@@ -6,16 +6,9 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"time"
 
 	"github.com/gocarina/gocsv"
 )
-
-// Date represents a date coming from groww apis. It's generally represented as time.DateOnly
-// Date.Time is nil if empty string was received
-type Date struct {
-	*time.Time
-}
 
 // Instrument - https://groww.in/trade-api/docs/curl/instruments#instrument-csv-columns
 type Instrument struct {
@@ -44,7 +37,7 @@ type Instrument struct {
 	// The minimum lot size for trading the instrument
 	LotSize int `csv:"lot_size"`
 	// The expiry date of the instrument (for Derivatives)
-	ExpiryDate Date `csv:"expiry_date"`
+	ExpiryDate NullableTime `csv:"expiry_date"`
 	// The strike price of the instrument (for Options)
 	StrikePrice int `csv:"strike_price"`
 	// The minimum price movement for the instrument
@@ -88,19 +81,4 @@ func Instruments(ctx context.Context, httpClient *http.Client) ([]Instrument, er
 	}
 
 	return out, nil
-}
-
-func (d *Date) UnmarshalCSV(in string) error {
-	if in == "" {
-		d.Time = nil
-		return nil
-	}
-
-	parsed, err := time.Parse(time.DateOnly, in)
-	if err != nil {
-		return fmt.Errorf("time.Parse(%q): %w", in, err)
-	}
-
-	d.Time = &parsed
-	return nil
 }

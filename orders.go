@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"net/url"
 	"strconv"
-	"time"
 )
 
 // PlaceOrderRequest represents the request data for Client.PlaceOrder
@@ -146,8 +145,8 @@ type Trade struct {
 	Segment          Segment         `json:"segment"`
 	Product          Product         `json:"product"`
 	TransactionType  TransactionType `json:"transaction_type"`
-	CreatedAt        time.Time       `json:"created_at"`
-	TradeDateTime    time.Time       `json:"trade_date_time"`
+	CreatedAt        Time            `json:"created_at"`
+	TradeDateTime    Time            `json:"trade_date_time"`
 	SettlementNumber string          `json:"settlement_number"`
 }
 
@@ -281,11 +280,11 @@ type Order struct {
 	// Product type
 	Product Product `json:"product"`
 	// Order created at date and time
-	CreatedAt time.Time `json:"created_at"`
+	CreatedAt Time `json:"created_at"`
 	// Date and Time at which order was placed at exchange
-	ExchangeTime time.Time `json:"exchange_time"`
+	ExchangeTime Time `json:"exchange_time"`
 	// Date on which trade has taken place
-	TradeDate time.Time `json:"trade_date"`
+	TradeDate Time `json:"trade_date"`
 	// User provided reference id to track the status of an order
 	OrderReferenceId string `json:"order_reference_id"`
 }
