@@ -10,6 +10,7 @@ import (
 )
 
 // QuoteRequest represents the request for Client.GetQuote
+//
 // https://groww.in/trade-api/docs/curl/live-data#request-schema
 type QuoteRequest struct {
 	// Stock Exchange
@@ -20,6 +21,7 @@ type QuoteRequest struct {
 	TradingSymbol string `json:"trading_symbol"`
 }
 
+// BookEntry represents a book entry for an instrument
 type BookEntry struct {
 	// Price of the book entry
 	Price float32 `json:"price"`
@@ -27,6 +29,10 @@ type BookEntry struct {
 	Quantity int `json:"quantity"`
 }
 
+// Quote represents the complete live data snapshot for an instrument including the latest price, market depth, ohlc, market volumes and much more.
+// It can be retrieved using Client.GetQuote method
+//
+// https://groww.in/trade-api/docs/curl/live-data#response-schema
 type Quote struct {
 	// Average price of the instrument in Rupees
 	AveragePrice float32 `json:"average_price"`
@@ -101,6 +107,7 @@ func (q QuoteRequest) queryParams() url.Values {
 // If one requires only the latest price data then the Client.GetLtp api should be used.
 // Similarly, if one is interested in getting only ohlc then Client.GetOhlc api should be used.
 // Use the segment value FNO for derivatives and CASH for stocks and index.
+//
 // https://groww.in/trade-api/docs/curl/live-data#get-quote
 func (c *Client) GetQuote(ctx context.Context, req QuoteRequest) (Quote, error) {
 	const destination = "https://api.groww.in/v1/live-data/quote"
@@ -108,6 +115,7 @@ func (c *Client) GetQuote(ctx context.Context, req QuoteRequest) (Quote, error) 
 }
 
 // LtpRequest represents request for Client.GetLtp
+//
 // https://groww.in/trade-api/docs/curl/live-data#request-schema-1
 type LtpRequest struct {
 	// Segment of the instrument such as CASH, FNO etc.
@@ -118,6 +126,7 @@ type LtpRequest struct {
 }
 
 // Ltp represents a map of instrument to it's last traded price
+//
 // https://groww.in/trade-api/docs/curl/live-data#response-1
 type Ltp map[string]float32
 
@@ -135,6 +144,7 @@ func (l LtpRequest) queryParams() url.Values {
 // GetLtp : The API can be used to get the latest price of an instrument.
 // Use the segment value FNO for derivatives and CASH for stocks and indices.
 // Upto 50 instruments are supported for each api call.
+//
 // https://groww.in/trade-api/docs/curl/live-data#get-ltp
 func (c *Client) GetLtp(ctx context.Context, req LtpRequest) (Ltp, error) {
 	const destination = "https://api.groww.in/v1/live-data/ltp"
@@ -142,6 +152,7 @@ func (c *Client) GetLtp(ctx context.Context, req LtpRequest) (Ltp, error) {
 }
 
 // OhlcRequest represents request for Client.GetOhlc
+//
 // https://groww.in/trade-api/docs/curl/live-data#request-2
 type OhlcRequest struct {
 	// Segment of the instrument such as CASH, FNO etc.
@@ -152,6 +163,7 @@ type OhlcRequest struct {
 }
 
 // OhlcResponse represents a map of instrument to ohlc
+//
 // https://groww.in/trade-api/docs/curl/live-data#response-2
 type OhlcResponse map[string]ohlcString
 
@@ -170,6 +182,7 @@ func (o OhlcRequest) queryParams() url.Values {
 // Use the segment value FNO for derivatives and CASH for stocks and indices. Upto 50 instruments are supported for each API call.
 // Note: The OHLC data retrieved using the OHLC API reflects the current time's OHLC (i.e., real-time snapshot).
 // For interval-based OHLC data (e.g., 1-minute, 5-minute candles), please refer to the Backtesting APIs.
+//
 // https://groww.in/trade-api/docs/curl/live-data#get-ohlc
 func (c *Client) GetOhlc(ctx context.Context, req OhlcRequest) (OhlcResponse, error) {
 	const destination = "https://api.groww.in/v1/live-data/ohlc"
@@ -177,6 +190,7 @@ func (c *Client) GetOhlc(ctx context.Context, req OhlcRequest) (OhlcResponse, er
 }
 
 // GetGreeksRequest represents the request for Client.GetGreeks
+//
 // https://groww.in/trade-api/docs/curl/live-data#request-schema-3
 type GetGreeksRequest struct {
 	// Stock Exchange - NSE or BSE
@@ -210,6 +224,8 @@ type Greeks struct {
 // GetGreeks : This API provides the complete Greeks data for FNO (Futures and Options) contracts.
 // Greeks are financial measures that help assess the risk and sensitivity of options contracts to various factors like underlying price changes, time decay, volatility, and interest rates.
 // This API is specifically designed for derivatives trading and risk management.
+//
+// https://groww.in/trade-api/docs/curl/live-data#get-greeks
 func (c *Client) GetGreeks(ctx context.Context, req GetGreeksRequest) (Greeks, error) {
 	destination := fmt.Sprintf(
 		"https://api.groww.in/v1/live-data/greeks/exchange/%s/underlying/%s/trading_symbol/%s/expiry/%s",

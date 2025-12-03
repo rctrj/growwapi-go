@@ -1,6 +1,7 @@
 ### Growwapi-go
 
-Unofficial go wrapper for [Groww APIs](https://groww.in/trade-api/docs/curl)
+Unofficial go wrapper for [Groww APIs](https://groww.in/trade-api/docs/curl). 
+The documentation is directly picked from the API docs
 
 Features:
 - Strongly typed golang structs

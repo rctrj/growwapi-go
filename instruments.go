@@ -10,7 +10,10 @@ import (
 	"github.com/gocarina/gocsv"
 )
 
-// Instrument - https://groww.in/trade-api/docs/curl/instruments#instrument-csv-columns
+// Instrument - Instruments are the financial assets that can be traded on exchanges through the Groww API.
+// These include stocks, futures, options, indices and other tradable securities.
+//
+// https://groww.in/trade-api/docs/curl/instruments#instrument-csv-columns
 type Instrument struct {
 	// The exchange where the instrument is traded
 	Exchange Exchange `csv:"exchange"`
@@ -52,11 +55,20 @@ type Instrument struct {
 	SellAllowed bool `csv:"sell_allowed"`
 }
 
+// Instruments are the financial assets that can be traded on exchanges through the Groww API.
+// These include stocks, futures, options, indices and other tradable securities.
+// The Instruments API provides essential data about these trading instruments that you'll need for many operations in the Groww API.
+//
+// https://groww.in/trade-api/docs/curl/instruments
 func (c *Client) Instruments(ctx context.Context) ([]Instrument, error) {
 	return Instruments(ctx, c.httpClient)
 }
 
-// Instruments fetches and returns details of all instruments
+// Instruments are the financial assets that can be traded on exchanges through the Groww API.
+// These include stocks, futures, options, indices and other tradable securities.
+// The Instruments API provides essential data about these trading instruments that you'll need for many operations in the Groww API.
+//
+// https://groww.in/trade-api/docs/curl/instruments
 func Instruments(ctx context.Context, httpClient *http.Client) ([]Instrument, error) {
 	if httpClient == nil {
 		httpClient = http.DefaultClient
