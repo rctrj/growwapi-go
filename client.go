@@ -153,6 +153,20 @@ func doPostRequest[T any](ctx context.Context, c *Client, url string, body any) 
 	return doRequest[T](ctx, c, req)
 }
 
+func doPutRequest[T any](ctx context.Context, c *Client, url string, body any) (out T, err error) {
+	msg, err := json.Marshal(body)
+	if err != nil {
+		return out, fmt.Errorf("json.Marshal: %w", err)
+	}
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodPut, url, bytes.NewBuffer(msg))
+	if err != nil {
+		return out, fmt.Errorf("http.NewRequest: %w", err)
+	}
+
+	return doRequest[T](ctx, c, req)
+}
+
 func doRequest[T any](ctx context.Context, c *Client, req *http.Request) (out T, err error) {
 	req.Header = c.headers()
 	resp, err := c.httpClient.Do(req)
