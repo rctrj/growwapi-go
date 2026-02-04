@@ -78,6 +78,9 @@ const (
 
 	// ExchangeNse - National Stock Exchange - India's largest exchange by trading volume
 	ExchangeNse Exchange = "NSE"
+
+	// ExchangeMcx - Multi Commodity Exchange - India's largest commodity exchange
+	ExchangeMcx Exchange = "MCX"
 )
 
 // Segment - https://groww.in/trade-api/docs/curl/annexures#segment
@@ -89,6 +92,9 @@ const (
 
 	// SegmentFno - Futures and Options segment for trading derivatives contracts
 	SegmentFno Segment = "FNO"
+
+	// SegmentCommodity - Commodity segment for trading commodity derivatives
+	SegmentCommodity Segment = "COMMODITY"
 )
 
 // OrderType - https://groww.in/trade-api/docs/curl/annexures#order-type

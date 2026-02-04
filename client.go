@@ -175,7 +175,7 @@ func doRequest[T any](ctx context.Context, c *Client, req *http.Request) (out T,
 	}
 
 	switch resp.StatusCode {
-	case http.StatusOK:
+	case http.StatusOK, http.StatusCreated, http.StatusAccepted:
 		var r apiResponse[T]
 		if err := json.NewDecoder(resp.Body).Decode(&r); err != nil {
 			return out, fmt.Errorf("json.NewDecoder(success_response): %w", err)

@@ -51,12 +51,30 @@ const (
 
 // GttOrderDetails represents the order details for a GTT order
 type GttOrderDetails struct {
-	// Order type - LIMIT or SL
+	// Order type - LIMIT, MARKET, SL, or SL_M
 	OrderType OrderType `json:"order_type"`
 	// Limit price (required for LIMIT/SL)
 	Price float32 `json:"price,omitempty"`
 	// Transaction type - BUY or SELL
 	TransactionType TransactionType `json:"transaction_type"`
+}
+
+// GttChildLeg represents a child leg for bracket orders in GTT
+type GttChildLeg struct {
+	// Order type for the child leg
+	OrderType OrderType `json:"order_type"`
+	// Price for the child leg
+	Price float32 `json:"price,omitempty"`
+	// Trigger price for the child leg
+	TriggerPrice float32 `json:"trigger_price,string,omitempty"`
+}
+
+// GttChildLegs represents the bracket order legs for a GTT order
+type GttChildLegs struct {
+	// Target leg
+	Target *GttChildLeg `json:"target,omitempty"`
+	// Stop loss leg
+	StopLoss *GttChildLeg `json:"stop_loss,omitempty"`
 }
 
 // CreateGttOrderRequest represents the request for creating a GTT order
@@ -79,6 +97,8 @@ type CreateGttOrderRequest struct {
 	TriggerDirection TriggerDirection `json:"trigger_direction"`
 	// Order details
 	Order GttOrderDetails `json:"order"`
+	// [Optional] Bracket order legs for target and stop loss
+	ChildLegs *GttChildLegs `json:"child_legs,omitempty"`
 	// Product type - CNC or MIS
 	ProductType Product `json:"product_type"`
 	// Stock Exchange
@@ -171,14 +191,18 @@ type SmartOrder struct {
 	Exchange Exchange `json:"exchange"`
 	// Duration
 	Duration Duration `json:"duration"`
-	// Whether modification is allowed
-	ModificationAllowed bool `json:"modification_allowed"`
 	// Whether cancellation is allowed
-	CancellationAllowed bool `json:"cancellation_allowed"`
+	IsCancellationAllowed bool `json:"is_cancellation_allowed"`
+	// Whether modification is allowed
+	IsModificationAllowed bool `json:"is_modification_allowed"`
 	// Created at timestamp
 	CreatedAt Time `json:"created_at"`
 	// Updated at timestamp
 	UpdatedAt Time `json:"updated_at"`
+	// Expiry timestamp
+	ExpireAt *Time `json:"expire_at,omitempty"`
+	// Triggered timestamp (null if not yet triggered)
+	TriggeredAt *Time `json:"triggered_at,omitempty"`
 }
 
 // CreateSmartOrder : This API is used to create a smart order (GTT or OCO).

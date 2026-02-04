@@ -236,3 +236,81 @@ func (c *Client) GetGreeks(ctx context.Context, req GetGreeksRequest) (Greeks, e
 	)
 	return doGetRequest[Greeks](ctx, c, destination, nil)
 }
+
+// GetOptionChainRequest represents the request for Client.GetOptionChain
+//
+// https://groww.in/trade-api/docs/curl/live-data#get-option-chain
+type GetOptionChainRequest struct {
+	// Stock Exchange - NSE or BSE
+	Exchange Exchange `json:"exchange"`
+	// Underlying symbol for the contract such as NIFTY, BANKNIFTY, RELIANCE etc.
+	Underlying string `json:"underlying"`
+	// Expiry date of the contract in YYYY-MM-DD format
+	ExpiryDate time.Time `json:"expiry_date"`
+}
+
+// OptionContractGreeks represents the Greeks for an option contract in the option chain
+type OptionContractGreeks struct {
+	// Delta measures the rate of change of option price
+	Delta float32 `json:"delta"`
+	// Gamma measures the rate of change of delta
+	Gamma float32 `json:"gamma"`
+	// Theta measures the rate of time decay
+	Theta float32 `json:"theta"`
+	// Vega measures the sensitivity to volatility
+	Vega float32 `json:"vega"`
+	// Rho measures the sensitivity to interest rates
+	Rho float32 `json:"rho"`
+	// Implied Volatility
+	Iv float32 `json:"iv"`
+}
+
+// OptionContract represents a single option contract (CE or PE) in the option chain
+type OptionContract struct {
+	// Trading Symbol of the contract as defined by the exchange
+	TradingSymbol string `json:"trading_symbol"`
+	// Last traded price
+	Ltp float32 `json:"ltp"`
+	// Open interest
+	OpenInterest float32 `json:"open_interest"`
+	// Volume of trades
+	Volume int `json:"volume"`
+	// Greeks for this option contract
+	Greeks OptionContractGreeks `json:"greeks"`
+}
+
+// OptionChainStrike represents a strike price with its CE and PE contracts
+type OptionChainStrike struct {
+	// Call option contract
+	Ce *OptionContract `json:"ce,omitempty"`
+	// Put option contract
+	Pe *OptionContract `json:"pe,omitempty"`
+}
+
+// OptionChain represents the complete option chain for an underlying at a specific expiry
+//
+// https://groww.in/trade-api/docs/curl/live-data#response-schema-3
+type OptionChain struct {
+	// Last traded price of the underlying
+	UnderlyingLtp float32 `json:"underlying_ltp"`
+	// Map of strike price to option contracts
+	Strikes map[string]OptionChainStrike `json:"strikes"`
+}
+
+// GetOptionChain : This API provides complete option chain data including Greeks for FNO contracts at specific expiry dates.
+// The option chain contains all available strike prices with their corresponding call (CE) and put (PE) option contracts.
+//
+// https://groww.in/trade-api/docs/curl/live-data#get-option-chain
+func (c *Client) GetOptionChain(ctx context.Context, req GetOptionChainRequest) (OptionChain, error) {
+	destination := fmt.Sprintf(
+		"https://api.groww.in/v1/option-chain/exchange/%s/underlying/%s",
+		req.Exchange,
+		req.Underlying,
+	)
+
+	params := make(url.Values)
+	params.Add("expiry_date", req.ExpiryDate.Format(time.DateOnly))
+
+	fullUrl := destination + "?" + params.Encode()
+	return doGetRequest[OptionChain](ctx, c, fullUrl, nil)
+}

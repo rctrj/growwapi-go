@@ -72,9 +72,10 @@ type GetContractsRequest struct {
 
 // GetContractsResponse represents the response for Client.GetContracts
 //
-// https://groww.in/trade-api/docs/curl/backtesting#response-schema
+// https://groww.in/trade-api/docs/curl/backtesting#response-schema-1
 type GetContractsResponse struct {
-	Contracts []Time `json:"contracts"`
+	// Array of Groww symbols for available contracts
+	Contracts []string `json:"contracts"`
 }
 
 func (g GetContractsRequest) queryParams() url.Values {

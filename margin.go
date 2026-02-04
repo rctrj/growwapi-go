@@ -9,40 +9,50 @@ import (
 
 // FnoMarginDetails represents the margin details for Futures and Options segment
 type FnoMarginDetails struct {
+	// Derivatives margin consumed
+	NetFnoMarginUsed float32 `json:"net_fno_margin_used"`
 	// SPAN margin requirement
-	SpanMargin float32 `json:"span_margin"`
-	// Exposure margin requirement
-	ExposureMargin float32 `json:"exposure_margin"`
-	// Available balance
-	AvailableBalance float32 `json:"available_balance"`
-	// Used margin
-	UsedMargin float32 `json:"used_margin"`
+	SpanMarginUsed float32 `json:"span_margin_used"`
+	// Exposure margin used
+	ExposureMarginUsed float32 `json:"exposure_margin_used"`
+	// Futures buying power
+	FutureBalanceAvailable float32 `json:"future_balance_available"`
+	// Option buying capacity
+	OptionBuyBalanceAvailable float32 `json:"option_buy_balance_available"`
+	// Option selling capacity
+	OptionSellBalanceAvailable float32 `json:"option_sell_balance_available"`
 }
 
 // EquityMarginDetails represents the margin details for Equity segment
 type EquityMarginDetails struct {
-	// CNC available balance
-	CncAvailableBalance float32 `json:"cnc_available_balance"`
-	// CNC used margin
-	CncUsedMargin float32 `json:"cnc_used_margin"`
-	// MIS available balance
-	MisAvailableBalance float32 `json:"mis_available_balance"`
-	// MIS used margin
-	MisUsedMargin float32 `json:"mis_used_margin"`
+	// Equity margin consumed
+	NetEquityMarginUsed float32 `json:"net_equity_margin_used"`
+	// CNC (delivery) margin used
+	CncMarginUsed float32 `json:"cnc_margin_used"`
+	// MIS (intraday) margin used
+	MisMarginUsed float32 `json:"mis_margin_used"`
+	// CNC (delivery) buying power
+	CncBalanceAvailable float32 `json:"cnc_balance_available"`
+	// MIS (intraday) buying power
+	MisBalanceAvailable float32 `json:"mis_balance_available"`
 }
 
 // CommodityMarginDetails represents the margin details for Commodity segment
 type CommodityMarginDetails struct {
-	// SPAN margin requirement
-	SpanMargin float32 `json:"span_margin"`
-	// Exposure margin requirement
-	ExposureMargin float32 `json:"exposure_margin"`
-	// Available balance
-	AvailableBalance float32 `json:"available_balance"`
-	// Used margin
-	UsedMargin float32 `json:"used_margin"`
-	// Mark to market value
-	M2mValue float32 `json:"m2m_value"`
+	// Commodity SPAN margin
+	CommoditySpanMargin float32 `json:"commodity_span_margin"`
+	// Commodity exposure margin
+	CommodityExposureMargin float32 `json:"commodity_exposure_margin"`
+	// Commodity tender margin
+	CommodityTenderMargin float32 `json:"commodity_tender_margin"`
+	// Commodity special margin
+	CommoditySpecialMargin float32 `json:"commodity_special_margin"`
+	// Commodity additional margin
+	CommodityAdditionalMargin float32 `json:"commodity_additional_margin"`
+	// Commodity unrealised Mark to Market
+	CommodityUnrealisedM2m float32 `json:"commodity_unrealised_m2m"`
+	// Commodity realised Mark to Market
+	CommodityRealisedM2m float32 `json:"commodity_realised_m2m"`
 }
 
 // UserMargin represents the margin details for a user

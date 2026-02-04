@@ -360,6 +360,6 @@ func (g GetOrderDetailsRequest) queryParams() url.Values {
 //
 // https://groww.in/trade-api/docs/curl/orders#get-order-details
 func (c *Client) GetOrderDetails(ctx context.Context, req GetOrderDetailsRequest) (Order, error) {
-	destination := fmt.Sprintf(" https://api.groww.in/v1/order/detail/%s", req.GrowwOrderId)
+	destination := fmt.Sprintf("https://api.groww.in/v1/order/detail/%s", req.GrowwOrderId)
 	return doGetRequest[Order](ctx, c, destination, req)
 }

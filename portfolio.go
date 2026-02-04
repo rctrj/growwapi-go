@@ -60,6 +60,8 @@ func (c *Client) GetHoldings(ctx context.Context) ([]Holding, error) {
 type Position struct {
 	// Trading Symbol of the instrument as defined by the exchange
 	TradingSymbol string `json:"trading_symbol"`
+	// Segment of the instrument (CASH, FNO, COMMODITY)
+	Segment Segment `json:"segment"`
 	// Credit quantity
 	CreditQuantity int `json:"credit_quantity"`
 	// Credit price
